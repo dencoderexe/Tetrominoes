@@ -1,0 +1,30 @@
+#define TETROMINO_SIZE 4
+#define TETROMINO_COUNT 7
+
+#define EMPTY 0
+#define RED_BLOCK 1
+#define GREEN_BLOCK 2
+#define BLUE_BLOCK 3
+#define YELLOW_BLOCK 4
+#define PINK_BLOCK 5
+#define CYAN_BLOCK 6
+#define ORANGE_BLOCK 7
+#define BORDER_BLOCK 8
+
+const int TETROMINO_I[TETROMINO_SIZE * TETROMINO_SIZE] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0};
+const int TETROMINO_O[TETROMINO_SIZE * TETROMINO_SIZE] = {0, 0, 0, 0, 0, 2, 2, 0, 0, 2, 2, 0, 0, 0, 0, 0};
+const int TETROMINO_T[TETROMINO_SIZE * TETROMINO_SIZE] = {0, 0, 0, 0, 0, 3, 3, 3, 0, 0, 3, 0, 0, 0, 0, 0};
+const int TETROMINO_J[TETROMINO_SIZE * TETROMINO_SIZE] = {0, 0, 0, 0, 0, 4, 0, 0, 0, 4, 4, 4, 0, 0, 0, 0};
+const int TETROMINO_L[TETROMINO_SIZE * TETROMINO_SIZE] = {0, 0, 0, 0, 0, 0, 0, 5, 0, 5, 5, 5, 0, 0, 0, 0};
+const int TETROMINO_S[TETROMINO_SIZE * TETROMINO_SIZE] = {0, 0, 0, 0, 0, 0, 6, 6, 0, 6, 6, 0, 0, 0, 0, 0};
+const int TETROMINO_Z[TETROMINO_SIZE * TETROMINO_SIZE] = {0, 0, 0, 0, 0, 7, 7, 0, 0, 0, 7, 7, 0, 0, 0, 0};
+
+const int *TETROMINOES[TETROMINO_COUNT] = {
+    TETROMINO_I,
+    TETROMINO_O,
+    TETROMINO_T,
+    TETROMINO_J,
+    TETROMINO_L,
+    TETROMINO_S,
+    TETROMINO_Z
+};

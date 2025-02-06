@@ -1,0 +1,33 @@
+#define TRUE 1
+#define FALSE 0
+
+#define ASPECT_RATIO (float)2 // WINDOW_HEIGHT / WINDOW_WIDTH
+#define WINDOW_HEIGHT 720
+#define WINDOW_WIDTH (WINDOW_HEIGHT / ASPECT_RATIO)
+
+#define FPS 30
+#define FRAME_TARGET_TIME (1000 / FPS)
+#define BLOCK_SPEED 500 // 2 blocks/sec
+
+#define FIELD_HEIGHT 20 // 18 + 2 for borders
+#define HEIGHT_BIAS 1
+#define FIELD_WIDTH 12 // 10 + 2 for borders
+#define WIDTH_BIAS 1
+#define BLOCK_SIZE (WINDOW_WIDTH / FIELD_WIDTH)
+#define SMALL_BLOCK_SIZE (BLOCK_SIZE / 1.5)
+#define FONT_SIZE (BLOCK_SIZE * 1.7)
+#define FIELD_ANCHOR_Y (WINDOW_HEIGHT / 6) // On the screen
+#define SCORE_ANCHOR_X 5 // On the screen
+#define SCORE_ANCHOR_Y SCORE_ANCHOR_X
+#define NEXT_ANCHOR_X SCORE_ANCHOR_X
+#define NEXT_ANCHOR_Y (SCORE_ANCHOR_Y + FONT_SIZE)
+#define NEXT_TETROMINO_ANCHOR_X (WINDOW_WIDTH - (5 * SMALL_BLOCK_SIZE))
+#define NEXT_TETROMINO_ANCHOR_Y (NEXT_ANCHOR_Y - (0.8 * SMALL_BLOCK_SIZE))
+#define TETROMINO_SPAWN_X 4 // In array
+#define TETROMINO_SPAWN_Y 0 // In array
+
+#define SINGLE 100
+#define DOUBLE 300
+#define TRIPLE 500
+#define TETRIS 800
+#define MAX_SCORE 999999
