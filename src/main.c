@@ -17,7 +17,7 @@
 #include "tetrominoes.h"
 #include "../assets/textures/icon.h"
 #include "../assets/fonts/Jersey_10/jersey10.h"
-#include "../assets/audio/background_music.h"
+// #include "../assets/audio/background_music.h"
 #include "../assets/audio/scoring.h"
 #include "../assets/audio/youwin.h"
 #include "../assets/audio/gameover.h"
@@ -67,13 +67,14 @@ void resize_window(void) {
 }
 
 void load_sounds(void) {
-    SDL_RWops *rw = SDL_RWFromMem(background_music, background_music_len);
-    if (!rw) {
-        SDL_Log("Error creating RWops for bg_music: %s\n", SDL_GetError());
-        return;
-    }
+    SDL_RWops *rw = NULL;
+    // rw = SDL_RWFromMem(background_music, background_music_len);
+    // if (!rw) {
+    //     SDL_Log("Error creating RWops for bg_music: %s\n", SDL_GetError());
+    //     return;
+    // }
 
-    bg_music = Mix_LoadMUS_RW(rw, 1);
+    // bg_music = Mix_LoadMUS_RW(rw, 1);
 
     rw = SDL_RWFromMem(scoring, scoring_len);
     if (!rw) {
@@ -176,7 +177,7 @@ int initialize_window(void) {
     load_icon();
 
     load_sounds();
-    if (!bg_music || !scoring_sound || !gameover_sound || !youwin_sound) {
+    if (/*!bg_music || */!scoring_sound || !gameover_sound || !youwin_sound) {
         SDL_Log("Error loading the sounds: %s.\n", Mix_GetError());
         return FALSE;
     }
@@ -190,7 +191,7 @@ void destroy_window(void) {
     TTF_CloseFont(font);
     TTF_Quit();
     Mix_HaltMusic();
-    Mix_FreeMusic(bg_music);
+    // Mix_FreeMusic(bg_music);
     Mix_CloseAudio();
     Mix_Quit();
     SDL_Quit();
@@ -295,7 +296,7 @@ void setup(void) {
     allocate_memory_for_game_field();
     mark_the_borders();
     spawn_tetromino();
-    Mix_PlayMusic(bg_music, -1);
+    // Mix_PlayMusic(bg_music, -1);
 }
 
 void process_key(SDL_Event event) {
