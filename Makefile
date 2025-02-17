@@ -1,4 +1,4 @@
-TARGET = ./build/Tetrominoes
+TARGET = ./builds/Tetrominoes
 SRC = ./src/*.c
 LINK_SDL2 = -Llibs\SDL2_dev\x86_64-w64-mingw32\lib -Ilibs\SDL2_dev\x86_64-w64-mingw32\include
 

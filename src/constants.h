@@ -16,6 +16,7 @@
 #define BLOCK_SIZE (WINDOW_WIDTH / FIELD_WIDTH)
 #define SMALL_BLOCK_SIZE (BLOCK_SIZE / 1.5)
 #define FONT_SIZE (BLOCK_SIZE * 1.7)
+#define FIELD_ANCHOR_X 0
 #define FIELD_ANCHOR_Y (WINDOW_HEIGHT / 6) // On the screen
 #define SCORE_ANCHOR_X 5 // On the screen
 #define SCORE_ANCHOR_Y SCORE_ANCHOR_X

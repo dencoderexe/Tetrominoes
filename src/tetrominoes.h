@@ -10,6 +10,7 @@
 #define CYAN_BLOCK 6
 #define ORANGE_BLOCK 7
 #define BORDER_BLOCK 8
+#define GHOST_BLOCK 9
 
 const int TETROMINO_I[TETROMINO_SIZE * TETROMINO_SIZE] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0};
 const int TETROMINO_O[TETROMINO_SIZE * TETROMINO_SIZE] = {0, 0, 0, 0, 0, 2, 2, 0, 0, 2, 2, 0, 0, 0, 0, 0};

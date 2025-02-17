@@ -325,6 +325,15 @@ void process_key(SDL_Event event) {
         }
         break;
     case SDLK_DOWN:
+        tmp_rotations -= 1;
+        if (tmp_rotations == -1) {
+            tmp_rotations = 3;
+        }
+        if (!collision(g.tetromino.x, g.tetromino.y, tmp_rotations)) {
+            g.tetromino.rotations = tmp_rotations;
+        }
+        break;
+    case SDLK_SPACE:
         if (!collision(g.tetromino.x, g.tetromino.y + 1, g.tetromino.rotations)) {
             g.tetromino.y++;
         }
@@ -451,15 +460,21 @@ void update(void) {
         return;
     }
 
-    if (collision(g.tetromino.x, g.tetromino.y + 1, g.tetromino.rotations)) {
-        lock_tetromino();
-        check_lines();
-        spawn_tetromino();
-    }
-    
+    int time_passed = FALSE;
     if (SDL_GetTicks() - last_frame_time >= BLOCK_SPEED) {
-        g.tetromino.y += 1;
-        last_frame_time = SDL_GetTicks();
+        time_passed = TRUE;
+    }
+
+    if (time_passed) {
+        if (collision(g.tetromino.x, g.tetromino.y + 1, g.tetromino.rotations)) {
+            lock_tetromino();
+            check_lines();
+            spawn_tetromino();
+        }
+        else {
+            g.tetromino.y += 1;
+            last_frame_time = SDL_GetTicks();
+        }
     }
 }
 
@@ -487,17 +502,17 @@ void render_text(char text[32], int text_x, int text_y) {
     SDL_RenderCopy(renderer, text_texture, NULL, &text_rect);
 }
 
-void render_block(int i, int j, SDL_Color color, int block_size, int anchor_x, int anchor_y) {
+void render_block(int i, int j, SDL_Color body_color, SDL_Color outline_color, int block_size, int anchor_x, int anchor_y) {
     int x = i;
     int y = j;
 
     // Draw block body
     SDL_Rect block = {y * block_size + anchor_x, x * block_size + anchor_y, block_size, block_size};
-    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+    SDL_SetRenderDrawColor(renderer, body_color.r, body_color.g, body_color.b, body_color.a);
     SDL_RenderFillRect(renderer, &block);
     // Draw block outline
     SDL_Rect block_outline = {y * block_size + anchor_x, x * block_size + anchor_y, block_size, block_size};
-    SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, BLACK.a);
+    SDL_SetRenderDrawColor(renderer, outline_color.r, outline_color.g, outline_color.b, outline_color.a);
     SDL_RenderDrawRect(renderer, &block_outline);
 }
 
@@ -527,28 +542,31 @@ void render_background(void) {
 void block_switch(int block_id, int i, int j, int block_size, int anchor_x, int anchor_y) {
     switch (block_id) {
     case BORDER_BLOCK:
-        render_block(i, j, GRAY, block_size, anchor_x, anchor_y);
+        render_block(i, j, GRAY, BLACK, block_size, anchor_x, anchor_y);
         break;
     case RED_BLOCK:
-        render_block(i, j, RED, block_size, anchor_x, anchor_y);
+        render_block(i, j, RED, BLACK, block_size, anchor_x, anchor_y);
         break;
     case GREEN_BLOCK:
-        render_block(i, j, GREEN, block_size, anchor_x, anchor_y);
+        render_block(i, j, GREEN, BLACK, block_size, anchor_x, anchor_y);
         break;
     case BLUE_BLOCK:
-        render_block(i, j, BLUE, block_size, anchor_x, anchor_y);
+        render_block(i, j, BLUE, BLACK, block_size, anchor_x, anchor_y);
         break;
     case YELLOW_BLOCK:
-        render_block(i, j, YELLOW, block_size, anchor_x, anchor_y);
+        render_block(i, j, YELLOW, BLACK, block_size, anchor_x, anchor_y);
         break;
     case PINK_BLOCK:
-        render_block(i, j, PINK, block_size, anchor_x, anchor_y);
+        render_block(i, j, PINK, BLACK, block_size, anchor_x, anchor_y);
         break;
     case CYAN_BLOCK:
-        render_block(i, j, CYAN, block_size, anchor_x, anchor_y);
+        render_block(i, j, CYAN, BLACK, block_size, anchor_x, anchor_y);
         break;
     case ORANGE_BLOCK:
-        render_block(i, j, ORANGE, block_size, anchor_x, anchor_y);
+        render_block(i, j, ORANGE, BLACK, block_size, anchor_x, anchor_y);
+        break;
+    case GHOST_BLOCK:
+        render_block(i, j, BLACK, WHITE, block_size, anchor_x, anchor_y);
         break;
     default:
         break;
@@ -577,6 +595,28 @@ void render_next_tetromino(void) {
     }
 }
 
+void render_fallen_tetromino(void) {
+    int x = g.tetromino.x;
+    int y = g.tetromino.y;
+    for (int i = y; i < FIELD_HEIGHT; i++) {
+        if (collision(x, i, g.tetromino.rotations)) {
+            break;
+        }
+        else {
+            y = i;
+        }
+    }
+
+    for (int i = 0; i < TETROMINO_SIZE; i++) {
+        for (int j = 0; j < TETROMINO_SIZE; j++) {
+            int block_id = rotate(j, i, g.tetromino.rotations, g.tetromino.tetromino_id);
+            if (block_id != EMPTY) {
+                block_switch(GHOST_BLOCK, i + y, j + x, BLOCK_SIZE, FIELD_ANCHOR_X, FIELD_ANCHOR_Y);
+            }
+        }
+    }
+}
+
 void render(void) {
     SDL_RenderClear(renderer);
 
@@ -590,22 +630,23 @@ void render(void) {
     for (int y = 0; y < FIELD_HEIGHT; y++) {
         for (int x = 0; x < FIELD_WIDTH; x++) {
             int block_id = g.field[y][x];
-            block_switch(block_id, y, x, BLOCK_SIZE, 0, FIELD_ANCHOR_Y);
+            block_switch(block_id, y, x, BLOCK_SIZE, FIELD_ANCHOR_X, FIELD_ANCHOR_Y);
         }
     }
 
     // Render active tetromino
     if (!g.game_over) {
+        render_fallen_tetromino();
         for (int y = 0; y < TETROMINO_SIZE; y++) {
             for (int x = 0; x < TETROMINO_SIZE; x++) {
                 int block_id = rotate(x, y, g.tetromino.rotations, g.tetromino.tetromino_id);
-                if (block_id != BORDER_BLOCK) {
-                    block_switch(block_id, y + g.tetromino.y, x + g.tetromino.x, BLOCK_SIZE, 0, FIELD_ANCHOR_Y);
+                if (block_id != EMPTY) {
+                    block_switch(block_id, y + g.tetromino.y, x + g.tetromino.x, BLOCK_SIZE, FIELD_ANCHOR_X, FIELD_ANCHOR_Y);
                 }
             }
         }
     }
-
+    
     if (g.game_over) {
         render_game_over();
     }
