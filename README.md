@@ -35,4 +35,4 @@ The output file can be found in "./builds/Linux/Tetrominoes" directory.
 
 # Gameplay
 
-https://github.com/dencoderexe/Tetrominoes/blob/main/screenshots/gameplay.gif
+![](https://github.com/dencoderexe/Tetrominoes/blob/main/screenshots/gameplay.gif)
