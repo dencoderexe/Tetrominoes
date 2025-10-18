@@ -1,5 +1,5 @@
 # Tetrominoes
-This game is my realization of Tetris. The project is written in C language using SDL2 libraries for rendering graphics and controlling input devices (currently keyboard).
+This game is my realization of the classic Tetris game. The project is written in C language using SDL2 libraries for rendering graphics and controlling input devices (currently keyboard).
 # Installing
 The game is already compiled for Windows and Linux operating systems with x64-bit architechture.
 ## Windows
